@@ -1,7 +1,5 @@
 ﻿using CommandSystem;
-using Exiled.API.Extensions;
-using Exiled.API.Features;
-using Exiled.Permissions.Extensions;
+using PluginAPI.Core;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -24,25 +22,25 @@ namespace TemporaryGruopAssignment.Commands
         {
             Player player = Player.Get(sender);
 
-            if(!player.CheckPermission("tga.settempgroup"))
+            if(!((CommandSender)sender).CheckPermission(PlayerPermissions.PermissionsManagement))
             {
                 response = "You lack permission to set a group!";
                 return false;
             }
             if(arguments.Count < 4)
             {
-                response = "Wrong usage: settempgroup <RawID> <groupToSet> <groupToGoBackTo> <Time>";
+                response = "Wrong usage: settempgroup <UserID> <groupToSet> <groupToGoBackTo> <Time>";
                 return false;
             }
 
             string[] argumentsArray = arguments.ToArray();
 
-            if(UserGroupExtensions.GetValue(argumentsArray[1]) == null && argumentsArray[1] != "default")
+            if(API.GetGroupFromString(argumentsArray[1]) == null && argumentsArray[1] != "default")
             {
                 response = "groupToSet does not exist.";
                 return false;
             }
-            if(UserGroupExtensions.GetValue(argumentsArray[2]) == null && argumentsArray[2] != "default")
+            if(API.GetGroupFromString(argumentsArray[2]) == null && argumentsArray[2] != "default")
             {
                 response = "groupToGoBackTo does not exist.";
                 return false;
@@ -73,12 +71,12 @@ namespace TemporaryGruopAssignment.Commands
                 sw.WriteLine($"{DateTimeOffset.Now.ToUnixTimeSeconds() + time}");
             }
 
-            Player playerToChange = Player.List.Where(x => x.RawUserId == argumentsArray[0]).FirstOrDefault();
+            Player playerToChange = Player.GetPlayers().Where(x => x.UserId == argumentsArray[0]).FirstOrDefault();
 
             if (argumentsArray[1] == "default")
-                playerToChange.Group = null;
+                playerToChange.ReferenceHub.serverRoles.Group = null;
             else
-                playerToChange.Group = UserGroupExtensions.GetValue(argumentsArray[1]);
+                playerToChange.ReferenceHub.serverRoles.Group = API.GetGroupFromString(argumentsArray[1]);
 
             response = "Group set successfully!";
             return true;
