@@ -1,9 +1,9 @@
 # TemporaryGroupAssignment
 A very simple plugin that lets you assign groups temporarly to players!
 # Permissions
-tga.settempgroup - needed to temporarly assign a group to someone
+`PermissionsManagement` - needed to temporarly assign a group to someone.
 # Example usage
-`settempgroup 76561198315366910 moderator owner 10d`
+`settempgroup 76561198315366910@steam moderator owner 10d`
 This means that I will get the moderator rank for 10 days, and then it will automatically go back to owner.
 # Default Config
 ```
