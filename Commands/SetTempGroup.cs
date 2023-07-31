@@ -79,7 +79,13 @@ namespace TemporaryGruopAssignment.Commands
                 sw.WriteLine($"{DateTimeOffset.Now.ToUnixTimeSeconds() + time}");
             }
 
-            Player playerToChange = Player.GetPlayers().Where(x => x.UserId == argumentsArray[0]).FirstOrDefault();
+            Player playerToChange = Player.GetPlayers().Where(x => x.UserId == argumentsArray[0]).First();
+
+            if(playerToChange == null)
+            {
+                response = "Group set successfully!";
+                return true;
+            }
 
             if (argumentsArray[1] == "default")
                 playerToChange.ReferenceHub.serverRoles.SetGroup(null, false);
