@@ -79,7 +79,10 @@ namespace TemporaryGruopAssignment.Commands
                 sw.WriteLine($"{DateTimeOffset.Now.ToUnixTimeSeconds() + time}");
             }
 
-            Player playerToChange = Player.GetPlayers().Where(x => x.UserId == argumentsArray[0]).First();
+            Player playerToChange = null;
+
+            if(Player.GetPlayers().Any(x => x.UserId == argumentsArray[0]))
+                playerToChange = Player.GetPlayers().Where(x => x.UserId == argumentsArray[0]).First();
 
             if(playerToChange == null)
             {
